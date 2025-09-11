@@ -49,7 +49,8 @@ config/processos.txt (configuração principal)
 examples/teste_bloqueio.txt (teste de múltiplos bloqueios)
 Estrutura do Projeto:
 
-projeto/ ├── src/ │ 
+projeto/ 
+├── src/ │ 
 ├── iCEVOS.java (classe principal) │ 
 ├── Scheduler.java (escalonador) │ 
 ├── Processo.java (classe processo) │ 
