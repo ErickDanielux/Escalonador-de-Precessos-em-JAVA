@@ -13,7 +13,7 @@ public class ListaDeProcessos {
         this.tamanho = 0;
     }
 
-    // Adiciona processo no final da lista
+    // Adiciona um processo no final da lista
     public void adicionarNoFinal(Processo processo) {
         No novoNo = new No(processo);
         
@@ -76,7 +76,7 @@ public class ListaDeProcessos {
         return sb.toString();
     }
 
-    // Retorna o primeiro processo sem removê-lo
+    // Retorna o primeiro processo sem remover
     public Processo obterPrimeiro() {
         if (inicio == null) {
             return null;
