@@ -1,66 +1,65 @@
+/**
+ * Classe que representa um processo no escalonador iCEVOS
+ */
 public class Processo {
+    private int id;
     private String nome;
-    private int burstTime;      // tempo total de execução (CPU)
-    private int tempoRestante;  // tempo ainda necessário
-    private int tempoChegada;   // quando entrou no sistema
-    private int tempoFinalizacao; // tempo em que terminou a execução
-    private int tempoEspera;    // acumulado
+    private int prioridade; // 1-Alta, 2-Média, 3-Baixa
+    private int ciclos_necessarios;
+    private String recurso_necessario; // pode ser null
+    private int prioridade_original; // para lembrar a prioridade original após bloqueio
 
-    public Processo(String nome, int burstTime, int tempoChegada) {
+    public Processo(int id, String nome, int prioridade, int ciclos_necessarios, String recurso_necessario) {
+        this.id = id;
         this.nome = nome;
-        this.burstTime = burstTime;
-        this.tempoRestante = burstTime;
-        this.tempoChegada = tempoChegada;
-        this.tempoFinalizacao = -1;
-        this.tempoEspera = 0;
+        this.prioridade = prioridade;
+        this.prioridade_original = prioridade;
+        this.ciclos_necessarios = ciclos_necessarios;
+        this.recurso_necessario = recurso_necessario;
     }
 
-    public String getNome() {
-        return nome;
-    }
+    // Getters
+    public int getId() { return id; }
+    public String getNome() { return nome; }
+    public int getPrioridade() { return prioridade; }
+    public int getPrioridadeOriginal() { return prioridade_original; }
+    public int getCiclosNecessarios() { return ciclos_necessarios; }
+    public String getRecursoNecessario() { return recurso_necessario; }
 
-    public int getBurstTime() {
-        return burstTime;
-    }
+    // Setters
+    public void setPrioridade(int prioridade) { this.prioridade = prioridade; }
+    public void setCiclosNecessarios(int ciclos) { this.ciclos_necessarios = ciclos; }
+    public void setRecursoNecessario(String recurso) { this.recurso_necessario = recurso; }
+    
+    // Libera o recurso necessário (usado após desbloqueio)
+    public void liberarRecurso() { this.recurso_necessario = null; }
 
-    public int getTempoRestante() {
-        return tempoRestante;
-    }
-
-    public int getTempoChegada() {
-        return tempoChegada;
-    }
-
-    public int getTempoFinalizacao() {
-        return tempoFinalizacao;
-    }
-
-    public void setTempoFinalizacao(int tempo) {
-        this.tempoFinalizacao = tempo;
-    }
-
-    public void incrementarEspera() {
-        if (tempoRestante > 0) {
-            tempoEspera++;
-        }
-    }
-
-    public int getTempoEspera() {
-        return tempoEspera;
-    }
-
-    public int getTurnaround() {
-        return tempoFinalizacao - tempoChegada;
-    }
-
+    // Método para diminuir ciclos necessários
     public void executarCiclo() {
-        if (tempoRestante > 0) {
-            tempoRestante--;
+        if (ciclos_necessarios > 0) {
+            ciclos_necessarios--;
         }
     }
 
-    public boolean finalizado() {
-        return tempoRestante == 0;
+    // Verifica se o processo terminou
+    public boolean terminou() {
+        return ciclos_necessarios <= 0;
+    }
+
+    // Verifica se precisa do recurso DISCO
+    public boolean precisaDisco() {
+        return "DISCO".equals(recurso_necessario);
+    }
+    
+    // Verifica se foi bloqueado por recurso DISCO na primeira vez
+    public boolean foiBloqueadoPorDisco() {
+        return "DISCO".equals(recurso_necessario);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("P%d(%s, Prio:%d, Ciclos:%d, Recurso:%s)", 
+                id, nome, prioridade, ciclos_necessarios, 
+                recurso_necessario != null ? recurso_necessario : "Nenhum");
     }
 }
-
