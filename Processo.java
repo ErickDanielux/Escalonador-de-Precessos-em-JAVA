@@ -41,7 +41,7 @@ public class Processo {
         }
     }
 
-    // Verifica se o processo terminou
+    // Verifica se o processo foi finalizado
     public boolean terminou() {
         return ciclos_necessarios <= 0;
     }
